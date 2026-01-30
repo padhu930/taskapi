@@ -130,6 +130,21 @@ AppUserDTO response = mapper.convertValue(appUser,AppUserDTO.class);
         return null;
     }
 
+    @Override
+    public ResponseEntity<String> updateUserEmail(Long userId, UpdateUserEmailRequest updateUserEmailRequest) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<String> updateUserName(Long userId, UpdateUserNameRequest updateUserNameRequest) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<String> updateUserMobile(Long userId, UpdateUserMobileRequest updateUserMobileRequest) {
+        return null;
+    }
+
     private void validateName(CreateUserRequest createUserRequest)
     {
         //Validation

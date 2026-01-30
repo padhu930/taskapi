@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -90,4 +91,10 @@ public class GlobalExceptionHandler {
         log.error("Data not found");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("DATA NOT FOUND");
     }
+   @ExceptionHandler(MissingRequestHeaderException.class)
+   public ResponseEntity<String> handleMissingRequestHeaderException(MissingRequestHeaderException ex)
+   {
+       log.error("User Id required");
+       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Id is required To access data");
+   }
 }

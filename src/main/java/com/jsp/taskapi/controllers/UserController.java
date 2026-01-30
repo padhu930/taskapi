@@ -33,7 +33,7 @@ public class UserController {
         return response;
     }
 
-    @PatchMapping
+    @PatchMapping("/email")
     public ResponseEntity<String> updateUserEmail(@RequestHeader Long userId,
                                              @RequestBody @Valid UpdateUserEmailRequest updateUserEmailRequest){
         log.info("updateUserEmail()");
@@ -41,6 +41,7 @@ public class UserController {
 
         return response;
     }
+
 
     @DeleteMapping
     ResponseEntity<String> deleteUser(String email,String mobile,String password){
@@ -76,4 +77,22 @@ public class UserController {
         ResponseEntity<LoginResponse> response = appUserService.login(loginRequest);
         return response;
     }
+
+    @PatchMapping("/name")
+    ResponseEntity<String> updateUserName(@RequestHeader Long userId ,
+                                        @RequestBody @Valid  UpdateUserNameRequest updateUserNameRequest){
+        log.info("updateUserName()");
+        ResponseEntity<String> response = appUserService.updateUserName(userId,updateUserNameRequest);
+        return response;
+    }
+
+
+    @PatchMapping("/mobile")
+    ResponseEntity<String> updateUserMobile(@RequestHeader Long userId ,
+                                          @RequestBody @Valid  UpdateUserMobileRequest updateUserMobileRequest){
+        log.info("updateUserMobile()");
+        ResponseEntity<String> response = appUserService.updateUserMobile(userId,updateUserMobileRequest);
+        return response;
+    }
+
 }
