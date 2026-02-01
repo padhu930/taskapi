@@ -1,5 +1,8 @@
 package com.jsp.taskapi.services.impl;
 
+import com.jsp.taskapi.data.tasks.Task;
+import com.jsp.taskapi.data.tasks.TaskDTO;
+import com.jsp.taskapi.data.tasks.TaskRepository;
 import com.jsp.taskapi.data.users.*;
 import com.jsp.taskapi.errors.DuplicateUserException;
 import com.jsp.taskapi.services.AppUserService;
@@ -20,6 +23,7 @@ import java.util.Optional;
 public class AppUserServiceImpl2 implements AppUserService {
 
     private final AppUserRepository appUserRepository;
+    private final TaskRepository taskRepository;
     private final ObjectMapper mapper;
     @Override
     public ResponseEntity<CreateUserResponse> createUser(CreateUserRequest createUserRequest) {
@@ -91,18 +95,25 @@ public class AppUserServiceImpl2 implements AppUserService {
     @Override
     public ResponseEntity<AppUserDTO> getUserById(Long userId) {
         log.info("getUserById()");
-        //perform db operations(GET USER FROM DB)
-//        AppUser appUser = userDb.get(userId);
-
-        Optional<AppUser> optional = appUserRepository.findById(userId);
-        AppUser appUser = optional.get();
+        //find the user by userId
+        AppUser appUser = appUserRepository.findById(userId).orElseThrow();
+        //convert appuser to appuserDTO
         AppUserDTO response = mapper.convertValue(appUser,AppUserDTO.class);
+        //find all the task of the user by userId
+        List<Task> taskList = taskRepository.findByAppUserUserId(userId);
+        List<TaskDTO> taskDtoList = new ArrayList<>();
+        //convert task to taskDTO
+        for(Task task : taskList){
+          TaskDTO taskDTO =  mapper.convertValue(task, TaskDTO.class);
+          taskDtoList.add(taskDTO);
+        }
+        //Set the taskDTO list
+        response.setTaskList(taskDtoList);
         //return response object
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
     }
-
     @Override
     public ResponseEntity<AppUserDTO> getUserByEmail(String email) {
         Optional<AppUser> optional = appUserRepository.findByEmail(email);

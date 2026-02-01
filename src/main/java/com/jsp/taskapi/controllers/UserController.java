@@ -15,12 +15,11 @@ import java.util.List;
 @RequestMapping("/api/v1/users")
 @Slf4j
 public class UserController {
-    //immutable
 
-    private  AppUserServiceImpl2 appUserService;
-    @Autowired
-    public UserController(AppUserServiceImpl2 appUserService)
-    {
+    //immutable
+    private final AppUserServiceImpl2 appUserService;
+
+    public UserController(AppUserServiceImpl2 appUserService) {
         this.appUserService = appUserService;
     }
 

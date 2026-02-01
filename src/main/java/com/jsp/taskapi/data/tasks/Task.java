@@ -1,28 +1,52 @@
 package com.jsp.taskapi.data.tasks;
 
-import com.jsp.taskapi.data.tasks.util.TaskStatus;
+import com.jsp.taskapi.data.comments.Comment;
+import com.jsp.taskapi.data.users.AppUser;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Generated;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
+
+import java.util.List;
 
 @Data
 @Entity
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
     private Long taskId;
+
     @Column(name="title",nullable = false,length = 50)
     private String title;
+
     @Column(name="description",nullable = false,length = 100)
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name="status")
-    private TaskStatus status;
 
-    @CreationTimestamp
+    @Column(name="status",nullable = false)
+    private String status;
+
+    @Column(name="createdAt",nullable = false)
     private String createdAt;
+
+    @Column(name="updatedAt",nullable = false)
     private String updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private AppUser appUser;
+
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "updatedAt='" + updatedAt + '\'' +
+                ", taskId=" + taskId +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", status='" + status + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                '}';
+    }
 }

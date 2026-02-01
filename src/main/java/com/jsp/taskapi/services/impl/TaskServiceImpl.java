@@ -1,20 +1,61 @@
 package com.jsp.taskapi.services.impl;
 
-import com.jsp.taskapi.data.tasks.CreateTaskRequest;
-import com.jsp.taskapi.data.tasks.Task;
-import com.jsp.taskapi.data.tasks.UpdateTaskRequest;
+import com.jsp.taskapi.data.comments.Comment;
+import com.jsp.taskapi.data.comments.CommentDTO;
+//import com.jsp.taskapi.data.comments.CommentRepository;
+import com.jsp.taskapi.data.tasks.*;
+import com.jsp.taskapi.data.users.AppUser;
+import com.jsp.taskapi.data.users.AppUserDTO;
+import com.jsp.taskapi.data.users.AppUserRepository;
 import com.jsp.taskapi.services.TaskService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class TaskServiceImpl implements TaskService {
+    private final ObjectMapper mapper;
+    private final TaskRepository taskRepository;
+    private final AppUserRepository appUserRepository;
+
     @Override
-    public ResponseEntity<String> createTask(CreateTaskRequest createTaskRequest) {
-        return null;
+    public ResponseEntity<Task> createTask(CreateTaskRequest createTaskRequest) {
+
+            log.info("inside createTask {}",createTaskRequest);
+
+            //validate the userId if not present Throw NoSuchElementFoundException
+            AppUser appUser = appUserRepository.findById(createTaskRequest.getUserId()).orElseThrow();
+
+            //Convert createTaskRequest to Task Entity
+            Task task = mapper.convertValue(createTaskRequest, Task.class);
+
+            //set created and updated Dates
+            task.setCreatedAt(LocalDate.now().toString());
+            task.setUpdatedAt(LocalDate.now().toString());
+            task.setAppUser(appUser);
+
+            //save the task to db
+            Task savedTask = taskRepository.save(task);
+
+            log.info("saved {} ",savedTask);
+
+            //return the response with savedTask
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedTask);
     }
+
+    @Autowired
+//    private final CommentRepository commentRepository;
+
 
     @Override
     public ResponseEntity<List<Task>> getAllTasks() {
@@ -22,9 +63,35 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public ResponseEntity<Task> getTaskByID(Long taskId) {
+    public ResponseEntity<TaskDTO> getTaskById(Long taskId) {
+
+            log.info("getTaskByID()");
+
+//            //find the task by taskId
+//            Task task = taskRepository.findById(taskId).orElseThrow();
+//
+//            //convert task to taskDTO
+//            TaskDTO response = mapper.convertValue(task,TaskDTO.class);
+//
+//            //find all the comments of the task by taskId
+//            List<Comment> commentList = commentRepository.findByTaskId(taskId);
+//
+//            List<CommentDTO> commentDTOList = new ArrayList<>();
+//
+//            //convert comment to commentDTO
+//            for(Comment comment : commentList){
+//                CommentDTO commentDTO =  mapper.convertValue(comment, CommentDTO.class);
+//                commentDTOList.add(commentDTO);
+//            }
+//            //Set the commentDTO list
+//            response.setCommentList(commentDTOList);
+//            //return response object
+//            return ResponseEntity.status(HttpStatus.OK).body(response);
         return null;
-    }
+        }
+
+
+
 
     @Override
     public ResponseEntity<String> updateTask(UpdateTaskRequest updateTaskRequest) {

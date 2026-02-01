@@ -1,10 +1,17 @@
 package com.jsp.taskapi.data.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jsp.taskapi.data.comments.Comment;
+import com.jsp.taskapi.data.tasks.Task;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
+
+import java.util.List;
 
 @Data
 @Entity
+@ToString(exclude = "taskList")
 @Table(name = "appusers")
 public class AppUser {
     @Id
@@ -26,4 +33,10 @@ public class AppUser {
 
     @Column(name = "isActive",nullable = false)
     private boolean isActive;
+
+    @OneToMany(mappedBy = "appUser")
+    @JsonIgnore
+    private List<Task> taskList;
+
+
 }
