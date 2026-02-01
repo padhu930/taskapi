@@ -21,5 +21,5 @@ public class TaskDTO {
 
     private String updatedAt;
 
-//    private List<CommentDTO> commentList;
+    private List<CommentDTO> commentList;
 }

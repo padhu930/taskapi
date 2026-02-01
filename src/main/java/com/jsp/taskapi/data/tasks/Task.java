@@ -1,5 +1,6 @@
 package com.jsp.taskapi.data.tasks;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jsp.taskapi.data.comments.Comment;
 import com.jsp.taskapi.data.users.AppUser;
 import jakarta.persistence.*;
@@ -36,6 +37,10 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "userId")
     private AppUser appUser;
+
+    @OneToMany
+    @JsonIgnore
+    private List<Comment> commentsList;
 
 
     @Override

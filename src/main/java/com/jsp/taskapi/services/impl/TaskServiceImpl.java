@@ -3,6 +3,7 @@ package com.jsp.taskapi.services.impl;
 import com.jsp.taskapi.data.comments.Comment;
 import com.jsp.taskapi.data.comments.CommentDTO;
 //import com.jsp.taskapi.data.comments.CommentRepository;
+import com.jsp.taskapi.data.comments.CommentRepository;
 import com.jsp.taskapi.data.tasks.*;
 import com.jsp.taskapi.data.users.AppUser;
 import com.jsp.taskapi.data.users.AppUserDTO;
@@ -27,6 +28,7 @@ public class TaskServiceImpl implements TaskService {
     private final ObjectMapper mapper;
     private final TaskRepository taskRepository;
     private final AppUserRepository appUserRepository;
+    private final CommentRepository commentRepository;
 
     @Override
     public ResponseEntity<Task> createTask(CreateTaskRequest createTaskRequest) {
@@ -67,27 +69,25 @@ public class TaskServiceImpl implements TaskService {
 
             log.info("getTaskByID()");
 
-//            //find the task by taskId
-//            Task task = taskRepository.findById(taskId).orElseThrow();
-//
-//            //convert task to taskDTO
-//            TaskDTO response = mapper.convertValue(task,TaskDTO.class);
-//
-//            //find all the comments of the task by taskId
-//            List<Comment> commentList = commentRepository.findByTaskId(taskId);
-//
-//            List<CommentDTO> commentDTOList = new ArrayList<>();
-//
-//            //convert comment to commentDTO
-//            for(Comment comment : commentList){
-//                CommentDTO commentDTO =  mapper.convertValue(comment, CommentDTO.class);
-//                commentDTOList.add(commentDTO);
-//            }
-//            //Set the commentDTO list
-//            response.setCommentList(commentDTOList);
-//            //return response object
-//            return ResponseEntity.status(HttpStatus.OK).body(response);
-        return null;
+            //find the task by taskId
+            Task task = taskRepository.findById(taskId).orElseThrow();
+            //convert task to taskDTO
+            TaskDTO response = mapper.convertValue(task,TaskDTO.class);
+            //find all the comments of the task by taskId
+            List<Comment> commentList = commentRepository.findByTaskTaskId(taskId);
+            List<CommentDTO> commentDtoList = new ArrayList<>();
+            //convert task to taskDTO
+            for(Comment comment : commentList){
+                CommentDTO commentDTO =  mapper.convertValue(comment, CommentDTO.class);
+                commentDtoList.add(commentDTO);
+            }
+            //Set the commentDTO list
+            response.setCommentList(commentDtoList);
+            //return response object
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(response);
+
         }
 
 

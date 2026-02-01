@@ -6,9 +6,11 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
+import java.time.LocalDate;
+
 @Data
 @Entity
-@ToString(exclude = "appUser")
+@ToString(exclude = "task")
 @Table(name = "comment")
 public class Comment {
 
@@ -20,8 +22,14 @@ public class Comment {
     @Column(name="text", nullable = false)
     private String text;
 
+    @Column(name="createdAt" , nullable = false)
+    private LocalDate createdAt;
+
+    @Column(name="status",nullable = false)
+    private String status;
+
     @ManyToOne
-    @JoinColumn(name = "task_Id")
-    private AppUser appUser;
+    @JoinColumn(name = "taskId")
+    private Task task;
 
 }
