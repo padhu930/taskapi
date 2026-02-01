@@ -1,5 +1,8 @@
 package com.jsp.taskapi.services.impl;
 
+import com.jsp.taskapi.data.comments.Comment;
+import com.jsp.taskapi.data.comments.CommentDTO;
+import com.jsp.taskapi.data.comments.CommentRepository;
 import com.jsp.taskapi.data.tasks.Task;
 import com.jsp.taskapi.data.tasks.TaskDTO;
 import com.jsp.taskapi.data.tasks.TaskRepository;
@@ -25,6 +28,7 @@ public class AppUserServiceImpl2 implements AppUserService {
     private final AppUserRepository appUserRepository;
     private final TaskRepository taskRepository;
     private final ObjectMapper mapper;
+    private final CommentRepository commentRepository;
     @Override
     public ResponseEntity<CreateUserResponse> createUser(CreateUserRequest createUserRequest) {
 
@@ -102,13 +106,28 @@ public class AppUserServiceImpl2 implements AppUserService {
         //find all the task of the user by userId
         List<Task> taskList = taskRepository.findByAppUserUserId(userId);
         List<TaskDTO> taskDtoList = new ArrayList<>();
+        //____________________________________________________________
+        List<Comment> commentList = commentRepository.findByAppUserUserId(userId);
+        List<CommentDTO> commentDTOList = new ArrayList<>();
+
+        for(Comment comment : commentList){
+            CommentDTO commentDTO =  mapper.convertValue(comment,CommentDTO.class);
+            commentDTOList.add(commentDTO);
+        }
+
         //convert task to taskDTO
         for(Task task : taskList){
           TaskDTO taskDTO =  mapper.convertValue(task, TaskDTO.class);
+          task.setCommentsList(commentList);
           taskDtoList.add(taskDTO);
         }
         //Set the taskDTO list
+
         response.setTaskList(taskDtoList);
+        response.setCommentList(commentDTOList);
+        response.setUserId(userId);
+
+
         //return response object
         return ResponseEntity
                 .status(HttpStatus.OK)

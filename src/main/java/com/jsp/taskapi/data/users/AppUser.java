@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @Entity
-@ToString(exclude = "taskList")
+@ToString(exclude = {"taskList","commentList"})
 @Table(name = "appusers")
 public class AppUser {
     @Id
@@ -34,9 +34,12 @@ public class AppUser {
     @Column(name = "isActive",nullable = false)
     private boolean isActive;
 
-    @OneToMany(mappedBy = "appUser")
+    @OneToMany(mappedBy = "appUser",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Task> taskList;
 
+    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Comment> commentList;
 
 }

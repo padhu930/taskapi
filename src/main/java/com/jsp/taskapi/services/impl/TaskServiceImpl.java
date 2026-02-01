@@ -67,26 +67,24 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public ResponseEntity<TaskDTO> getTaskById(Long taskId) {
 
-            log.info("getTaskByID()");
-
-            //find the task by taskId
-            Task task = taskRepository.findById(taskId).orElseThrow();
-            //convert task to taskDTO
-            TaskDTO response = mapper.convertValue(task,TaskDTO.class);
-            //find all the comments of the task by taskId
-            List<Comment> commentList = commentRepository.findByTaskTaskId(taskId);
-            List<CommentDTO> commentDtoList = new ArrayList<>();
-            //convert task to taskDTO
-            for(Comment comment : commentList){
-                CommentDTO commentDTO =  mapper.convertValue(comment, CommentDTO.class);
-                commentDtoList.add(commentDTO);
-            }
-            //Set the commentDTO list
-            response.setCommentList(commentDtoList);
-            //return response object
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(response);
+        //find the task by taskId
+        Task task = taskRepository.findById(taskId).orElseThrow();
+        //convert task to taskDTO
+        TaskDTO response = mapper.convertValue(task,TaskDTO.class);
+        //find all the comments of the task by taskId
+        List<Comment> commentList = commentRepository.findByTaskTaskId(taskId);
+        List<CommentDTO> commentDtoList = new ArrayList<>();
+        //convert task to taskDTO
+        for(Comment comment : commentList){
+            CommentDTO commentDTO =  mapper.convertValue(comment, CommentDTO.class);
+            commentDtoList.add(commentDTO);
+        }
+        //Set the commentDTO list
+        response.setCommentList(commentDtoList);
+        //return response object
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
 
         }
 

@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Data
 @Entity
-@ToString(exclude = "task")
+@ToString(exclude = {"task","appUser"})
 @Table(name = "comment")
 public class Comment {
 
@@ -29,7 +29,11 @@ public class Comment {
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "taskId")
+    @JoinColumn(name = "task_id")
     private Task task;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private AppUser appUser;
 
 }
