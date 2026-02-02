@@ -1,6 +1,7 @@
 package com.jsp.taskapi.services;
 
 import com.jsp.taskapi.data.comments.CommentDTO;
+import com.jsp.taskapi.data.tags.AssignTagToTaskResponse;
 import com.jsp.taskapi.data.tasks.CreateTaskRequest;
 import com.jsp.taskapi.data.tasks.Task;
 import com.jsp.taskapi.data.tasks.TaskDTO;
@@ -17,4 +18,6 @@ public interface TaskService {
     ResponseEntity<TaskDTO> getTaskById(Long taskId);
     ResponseEntity<String> updateTask(UpdateTaskRequest updateTaskRequest);
     ResponseEntity<String> deleteTaskByID(Long taskId);
+
+    ResponseEntity<AssignTagToTaskResponse> addTagToTask(Long taskId , Long tagId);
 }

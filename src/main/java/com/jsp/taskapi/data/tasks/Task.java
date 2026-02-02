@@ -2,17 +2,22 @@ package com.jsp.taskapi.data.tasks;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jsp.taskapi.data.comments.Comment;
+import com.jsp.taskapi.data.tags.Tags;
 import com.jsp.taskapi.data.users.AppUser;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Generated;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
+@EqualsAndHashCode(onlyExplicitlyIncluded = true) //dont add equals and hashcode
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,9 +43,16 @@ public class Task {
     @JoinColumn(name = "userId")
     private AppUser appUser;
 
-    @OneToMany
+    @OneToMany(mappedBy = "task",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Comment> commentsList;
+
+
+    @ManyToMany
+    @JoinTable(name = "task_tag_ids",
+               joinColumns = @JoinColumn(name = "taskId"),
+               inverseJoinColumns = @JoinColumn(name = "tagId"))
+    private Set<Tags> tags = new HashSet<>();
 
 
     @Override

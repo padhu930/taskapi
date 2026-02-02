@@ -121,8 +121,10 @@ public class AppUserServiceImpl2 implements AppUserService {
           task.setCommentsList(commentList);
           taskDtoList.add(taskDTO);
         }
-        //Set the taskDTO list
 
+        //--------------------------------------
+//        taskRepository.findById(taskId);
+        //Set the taskDTO list
         response.setTaskList(taskDtoList);
         response.setCommentList(commentDTOList);
         response.setUserId(userId);
@@ -200,7 +202,7 @@ public class AppUserServiceImpl2 implements AppUserService {
        Optional<AppUser> appUserOptional = appUserRepository.findByNameAndUserId(updateUserNameRequest.getOldName(),
                updateUserNameRequest.getUserId());
         if(appUserOptional.isEmpty()){
-                throw new IllegalArgumentException("User with given email and userId not found");
+                throw new IllegalArgumentException("User with given name and userId not found");
         }
         else{
             AppUser appUser = appUserOptional.get();
@@ -229,6 +231,5 @@ public class AppUserServiceImpl2 implements AppUserService {
             appUserRepository.save(appUser);
         }
         return ResponseEntity.ok("User mobile is updated Successfully");
-
     }
 }

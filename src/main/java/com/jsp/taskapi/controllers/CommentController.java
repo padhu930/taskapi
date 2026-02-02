@@ -34,5 +34,11 @@ public class CommentController {
         return response;
     }
 
+    @GetMapping
+    ResponseEntity<String> getComments(@PathVariable Long userId,@PathVariable Long taskId)
+    {
+        return null;
+    }
+
 
 }

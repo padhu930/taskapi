@@ -1,5 +1,6 @@
 package com.jsp.taskapi.controllers;
 
+import com.jsp.taskapi.data.tags.AssignTagToTaskResponse;
 import com.jsp.taskapi.data.tasks.CreateTaskRequest;
 import com.jsp.taskapi.data.tasks.Task;
 import com.jsp.taskapi.data.tasks.TaskDTO;
@@ -34,5 +35,11 @@ public class TaskController {
         log.info("getUserById()");
         ResponseEntity<TaskDTO> response = taskService.getTaskById(taskId);
         return response;
+    }
+
+    @PostMapping("/{taskId}/tags/{tagId}")
+    ResponseEntity<AssignTagToTaskResponse> assignTagToTask(@PathVariable Long taskId,
+                                                            @PathVariable Long tagId){
+    return taskService.addTagToTask(taskId,tagId);
     }
 }
