@@ -1,6 +1,7 @@
 package com.jsp.taskapi.data.tasks;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jsp.taskapi.data.comments.Comment;
 import com.jsp.taskapi.data.tags.Tags;
 import com.jsp.taskapi.data.users.AppUser;
@@ -17,6 +18,7 @@ import java.util.Set;
 
 @Data
 @Entity
+@ToString(exclude = {"appUser","commentList","tags"})
 @EqualsAndHashCode(onlyExplicitlyIncluded = true) //dont add equals and hashcode
 public class Task {
     @Id
@@ -43,10 +45,9 @@ public class Task {
     @JoinColumn(name = "userId")
     private AppUser appUser;
 
-    @OneToMany(mappedBy = "task",cascade = CascadeType.ALL)
-    @JsonIgnore
+    @OneToMany(mappedBy = "task",cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Comment> commentsList;
-
 
     @ManyToMany
     @JoinTable(name = "task_tag_ids",
@@ -55,15 +56,16 @@ public class Task {
     private Set<Tags> tags = new HashSet<>();
 
 
-    @Override
-    public String toString() {
-        return "Task{" +
-                "updatedAt='" + updatedAt + '\'' +
-                ", taskId=" + taskId +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
-                ", createdAt='" + createdAt + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Task{" +
+//                "updatedAt='" + updatedAt + '\'' +
+//                ", taskId=" + taskId +
+//                ", title='" + title + '\'' +
+//                ", description='" + description + '\'' +
+//                ", status='" + status + '\'' +
+//                ", createdAt='" + createdAt + '\'' +
+//                '}';
+//    }
+
 }

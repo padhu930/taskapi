@@ -11,6 +11,6 @@ public class CommentDTO {
     private Long commentId;
     private String text;
     private LocalDate createdAt;
-
-    private AppUser appUser;
+    private String status;
+//    private AppUser appUser;
 }

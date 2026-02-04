@@ -20,11 +20,6 @@ public class CommentController {
 
     private final CommentService commentService;
 
-//    @Autowired
-//    public CommentController(CommentService commentService) {
-//        this.commentService = commentService;
-//    }
-
     @PostMapping
     public ResponseEntity<Comment> addComment(@RequestBody CommentRequest commentRequest){
         log.info("inside addComment() commentRequest:{}",commentRequest);
@@ -39,6 +34,5 @@ public class CommentController {
     {
         return null;
     }
-
 
 }

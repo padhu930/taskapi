@@ -12,10 +12,6 @@ public class CommentRequest {
     @NotBlank(message = "Empty comment doesnot allowed")
     private String text;
 
-
-//    @NotBlank(message = "Provide Created Date")
-//    private LocalDate createdAt;
-
     @NotBlank(message = "Mention the status first...")
     private String status;
 

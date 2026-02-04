@@ -1,6 +1,7 @@
 package com.jsp.taskapi.data.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jsp.taskapi.data.comments.Comment;
 import com.jsp.taskapi.data.tasks.Task;
 import jakarta.persistence.*;

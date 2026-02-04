@@ -1,5 +1,6 @@
 package com.jsp.taskapi.data.comments;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jsp.taskapi.data.tasks.Task;
 import com.jsp.taskapi.data.users.AppUser;
 import jakarta.persistence.*;
@@ -29,11 +30,14 @@ public class Comment {
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "task_id")
-    private Task task;
-
-    @ManyToOne
     @JoinColumn(name = "user_id")
     private AppUser appUser;
+
+    @ManyToOne
+    @JoinColumn(name = "task_id")
+    @JsonBackReference
+    private Task task;
+
+
 
 }

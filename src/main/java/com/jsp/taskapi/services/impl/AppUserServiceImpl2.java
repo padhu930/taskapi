@@ -96,45 +96,84 @@ public class AppUserServiceImpl2 implements AppUserService {
                 .body(appUserDTOList);
     }
 
+
     @Override
     public ResponseEntity<AppUserDTO> getUserById(Long userId) {
+
         log.info("getUserById()");
-        //find the user by userId
+
         AppUser appUser = appUserRepository.findById(userId).orElseThrow();
-        //convert appuser to appuserDTO
-        AppUserDTO response = mapper.convertValue(appUser,AppUserDTO.class);
-        //find all the task of the user by userId
+        AppUserDTO response = mapper.convertValue(appUser, AppUserDTO.class);
+
+        // fetch tasks
         List<Task> taskList = taskRepository.findByAppUserUserId(userId);
         List<TaskDTO> taskDtoList = new ArrayList<>();
-        //____________________________________________________________
-        List<Comment> commentList = commentRepository.findByAppUserUserId(userId);
-        List<CommentDTO> commentDTOList = new ArrayList<>();
 
-        for(Comment comment : commentList){
-            CommentDTO commentDTO =  mapper.convertValue(comment,CommentDTO.class);
-            commentDTOList.add(commentDTO);
+        for (Task task : taskList) {
+            TaskDTO taskDTO = mapper.convertValue(task, TaskDTO.class);
+            // fetch comments for this task
+            List<Comment> taskComments = commentRepository.findByTaskTaskId(task.getTaskId());
+            List<CommentDTO> commentDTOList = new ArrayList<>();
+            for (Comment comment : taskComments) {
+                CommentDTO commentDTO = mapper.convertValue(comment, CommentDTO.class);
+                commentDTOList.add(commentDTO);
+            }
+            // attach comments to taskDTO
+            taskDTO.setCommentList(commentDTOList);
+
+            taskDtoList.add(taskDTO);
         }
 
-        //convert task to taskDTO
-        for(Task task : taskList){
-          TaskDTO taskDTO =  mapper.convertValue(task, TaskDTO.class);
-          task.setCommentsList(commentList);
-          taskDtoList.add(taskDTO);
-        }
-
-        //--------------------------------------
-//        taskRepository.findById(taskId);
-        //Set the taskDTO list
         response.setTaskList(taskDtoList);
-        response.setCommentList(commentDTOList);
-        response.setUserId(userId);
 
+        // optional: if you also want top-level comments directly under user
+        List<Comment> userComments = commentRepository.findByAppUserUserId(userId);
+        List<CommentDTO> userCommentDTOList = new ArrayList<>();
+        for (Comment comment : userComments) {
+            CommentDTO commentDTO = mapper.convertValue(comment, CommentDTO.class);
+            userCommentDTOList.add(commentDTO);
+        }
+        response.setCommentList(userCommentDTOList);
 
-        //return response object
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+//    @Override
+//    public ResponseEntity<AppUserDTO> getUserById(Long userId) {
+//        log.info("getUserById()");
+//        //find the user by userId
+//        AppUser appUser = appUserRepository.findById(userId).orElseThrow();
+//        //convert appuser to appuserDTO
+//        AppUserDTO response = mapper.convertValue(appUser,AppUserDTO.class);
+//        //find all the task of the user by userId
+//        List<Task> taskList = taskRepository.findByAppUserUserId(userId);
+//        List<TaskDTO> taskDtoList = new ArrayList<>();
+//        //____________________________________________________________
+//        List<Comment> commentList = commentRepository.findByAppUserUserId(userId);
+//        List<CommentDTO> commentDTOList = new ArrayList<>();
+//
+//        //convert task to taskDTO
+//        for(Task task : taskList){
+//            TaskDTO taskDTO =  mapper.convertValue(task, TaskDTO.class);
+//            taskDtoList.add(taskDTO);
+//        }
+//
+//        for(Comment comment : commentList){
+//            CommentDTO commentDTO =  mapper.convertValue(comment,CommentDTO.class);
+//            commentDTOList.add(commentDTO);
+//        }
+//
+////        Set the taskDTO list
+//        response.setTaskList(taskDtoList);
+//        response.setCommentList(commentDTOList);
+////        response.setUserId(userId);
+//
+//
+//        //return response object
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(response);
+//    }
     @Override
     public ResponseEntity<AppUserDTO> getUserByEmail(String email) {
         Optional<AppUser> optional = appUserRepository.findByEmail(email);

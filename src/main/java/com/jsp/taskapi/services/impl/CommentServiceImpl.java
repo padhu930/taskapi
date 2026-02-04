@@ -49,7 +49,6 @@ public class CommentServiceImpl implements CommentService {
         comment.setText("Added create operation");
         comment.setTask(task);
         comment.setAppUser(appUser);
-//        comment.setTask(task);
 
         //save the comment to DB
         Comment savedComment = commentRepository.save(comment);
